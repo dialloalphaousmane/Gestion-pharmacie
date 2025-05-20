@@ -21,11 +21,11 @@ def main():
 if __name__ == '__main__':
     main()
 
-from bibliotheque.models import Livre
+#from bibliotheque.models import Livre
 
 # Créer une nouvelle instance du modèle Livre
-nouveau_livre = Livre(titre='Le Petit Prince', auteur='Antoine de Saint-Exupéry', date_publication='1943-04-06')
+#nouveau_livre = Livre(titre='Le Petit Prince', auteur='Antoine de Saint-Exupéry', date_publication='1943-04-06')
 
 # Enregistrer l'instance dans la base de données
-nouveau_livre.save()
+#nouveau_livre.save()
 

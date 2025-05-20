@@ -10,11 +10,11 @@
 </head>
 <body>
   <main>
-    <img src="{% static 'logo.png' %}" alt="" srcset="" width="10%">
-    <h1>piergyDeveloppement</h1>
-    <p>République Du Congo</p>
+    <img src="{% static '10.jpeg' %}" alt="" srcset="" width="10%">
+    <h1> Pharmacie  Alpha  et Kolonka</h1>
+    <p>République De Guinnée</p>
     <p>Service Informatique & Divers</p>
-    <p>+242 06 572 28</p>
+    <p>+224 622 11 72 36 </p>
     <h2>Facture De Phramacie</h2>
     <p><time>Date & Heure :{{sale_date}} </time></p>
     <table class="client">
@@ -42,8 +42,8 @@
 
           <td>{{produit}}</td>
           <td> {{quantite}}</td>
-          <td> {{prix_unitaire}} FCFA</td>
-          <td>{{total_amount}} FCFA</td>
+          <td> {{prix_unitaire}} GNF</td>
+          <td>{{total_amount}} GNF</td>
         </tr>
       </tbody>
         <tfoot>
@@ -55,12 +55,12 @@
             <td colspan="3">Pour tout soucis, voir le vendeur.</td>
           </tr>
           <tr>
-            <td colspan="4">{{total_amount}} FCFA</td>
+            <td colspan="4">{{total_amount}} GNF</td>
           </tr>
         </tfoot>  
       </table>
   </main>
-  <button id="print-button" style="background-color: blue; color: aliceblue;">Imprimer</button>
+  <button id="print-button" style="background-color: blue; color: aliceblue;">Imprimer la facture</button>
 </body>
 <script>
   document.getElementById("print-button").addEventListener("click", function() {
