@@ -1,0 +1,19 @@
+<h2>Historique des ventes</h2>
+<table>
+    <tr>
+        <th>Produit</th>
+        <th>Client</th>
+        <th>Quantité</th>
+        <th>Date</th>
+        <th>Montant total</th>
+    </tr>
+    {% for vente in ventes %}
+    <tr>
+        <td>{{ vente.produit.name }}</td>
+        <td>{{ vente.customer }}</td>
+        <td>{{ vente.quantite }}</td>
+        <td>{{ vente.sale_date }}</td>
+        <td>{{ vente.total_amount }}</td>
+    </tr>
+    {% endfor %}
+</table>

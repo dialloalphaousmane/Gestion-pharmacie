@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block produit%}
+  <div class="container mt-4">
+    <h2>🔔 Notifications Produits</h2>
+
+    {% if produits_perimes %}
+      <div class="alert alert-danger">
+        <strong>{{ produits_perimes|length }} produit(s) périmé(s) :</strong>
+        <ul>
+          {% for produit in produits_perimes %}
+            <li>{{ produit.name }} — expiré le {{ produit.date_expiration }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    {% if produits_stock_faible %}
+      <div class="alert alert-warning">
+        <strong>{{ produits_stock_faible|length }} produit(s) en stock faible :</strong>
+        <ul>
+          {% for produit in produits_stock_faible %}
+            <li>{{ produit.name }} — stock restant : {{ produit.quantite }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    {% if not produits_perimes and not produits_stock_faible %}
+      <div class="alert alert-success">Aucune alerte pour le moment !</div>
+    {% endif %}
+  </div>
+{% endblock %}

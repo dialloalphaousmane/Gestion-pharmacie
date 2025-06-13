@@ -15,6 +15,10 @@ from .models import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
+from django.shortcuts import render
+from .models import Produits
+
+
 # Create your views here.
 
 # def home(request):
@@ -37,12 +41,13 @@ def Acc(request):
 
 
 class Affichage(LoginRequiredMixin, ListView):
-
-    # Affichage du template
     template_name = 'home.html'
-    # Récupération des données
     queryset = Produits.objects.all()
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['low_stock_list'] = Produits.objects.filter(quantite__lte=10)
+        return context
 
 
 # Class dj'ajout des données
@@ -441,3 +446,73 @@ def Creation_Compte(request):
 
     return render(request, 'creation.html')
 
+    #pour la route de iA
+    from django.shortcuts import render
+
+def ia_assistant(request):
+    return render(request, 'ia.html')  # et non 'produits/ia.html'
+
+
+ # Crée un fichier ia.html dans templates/produits/
+
+
+# views.py (extrait)
+# views.py
+from datetime import date
+from django.shortcuts import render
+from .models import Produits
+
+def notifications_view(request):
+    produits_perimes = Produits.objects.filter(date_expiration__lt=date.today())
+    produits_stock_faible = Produits.objects.filter(quantite__lte=10)
+
+    print("=== Produits périmés ===")
+    print(produits_perimes)
+    print("=== Produits stock faible ===")
+    print(produits_stock_faible)
+
+    context = {
+        'produits_perimes': produits_perimes,
+        'produits_stock_faible': produits_stock_faible,
+    }
+
+    return render(request, 'notifications.html', context)
+
+from django.shortcuts import render
+from django.db.models import Count
+from .models import Produits, Vente, Categories
+from datetime import date
+from collections import defaultdict
+import calendar
+
+def statistiques_view(request):
+    total_produits = Produits.objects.count()
+    produits_perimes = Produits.objects.filter(date_expiration__lt=date.today()).count()
+    stock_faible = Produits.objects.filter(quantite__lte=10).count()
+
+    # Ventes mensuelles
+    ventes_par_mois = defaultdict(int)
+    ventes = Vente.objects.all()
+
+    for vente in ventes:
+        mois = vente.sale_date.month
+        ventes_par_mois[mois] += vente.quantite
+
+    mois_labels = [calendar.month_name[m] for m in range(1, 13)]
+    # Remplace par :
+    mois_labels = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+    ventes_data = [ventes_par_mois.get(m, 0) for m in range(1, 13)]
+
+    # Répartition des produits par catégorie
+    repartition_categories = Produits.objects.values('category__name').annotate(nombre=Count('id'))
+
+    context = {
+        'total_produits': total_produits,
+        'produits_perimes': produits_perimes,
+        'stock_faible': stock_faible,
+        'mois_labels': mois_labels,
+        'ventes_data': ventes_data,
+        'repartition_categories': repartition_categories,
+    }
+
+    return render(request, 'statistiques.html', context)
