@@ -1,149 +1,170 @@
 {% load static %}
+{% load widget_tweaks %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajout des données</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'font-awesome.min.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajout d’un produit | Gestion Pharmacie</title>
+  <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'font-awesome.min.css' %}">
+  <style>
+    body {
+      background: linear-gradient(135deg, #e0f7fa, #ffffff);
+      font-family: 'Segoe UI', sans-serif;
+    }
 
-    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> -->
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      background-color: white;
+      padding: 40px;
+    }
+
+    .form-label i {
+      margin-right: 8px;
+    }
+
+    .form-control {
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: #0d6efd;
+      box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+
+    .btn-primary {
+      border-radius: 10px;
+      font-weight: bold;
+      padding: 10px 25px;
+    }
+
+    .image-preview {
+      margin-top: 10px;
+      max-width: 150px;
+      max-height: 150px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .text-danger {
+      font-size: 0.85rem;
+    }
+
+    h3 i {
+      color: #0d6efd;
+    }
+
+    .form-label .fa {
+      width: 20px;
+    }
+
+    /* Icônes colorées */
+    .fa-capsules { color: #0d6efd; }
+    .fa-list-alt { color: #6f42c1; }
+    .fa-dollar-sign { color: #198754; }
+    .fa-boxes { color: #fd7e14; }
+    .fa-calendar-alt { color: #d63384; }
+    .fa-image { color: #dc3545; }
+    .fa-align-left { color: #0dcaf0; }
+  </style>
 </head>
 <body>
 
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card">
+        <h3 class="text-center mb-3">
+          <i class="fa fa-plus-circle"></i> Ajout d’un produit
+        </h3>
+        <p class="text-center text-muted mb-4">Remplissez soigneusement le formulaire ci-dessous</p>
 
-    <div class="container-fluid px-1 py-5 mx-auto">
-        <div class="row d-flex justify-content-center">
-            <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center">
-                <h3>Ajout des produits</h3>
-                <p class="blue-text">Veuillez noter que <br> tout les champs sont obligatoire</p>
-                <div class="card">
-                    <h5 class="text-center mb-4">Pharmacie projet</h5>
-                        <form class="form-card" method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
 
-                            {% if messages %}
-                            <ul class="messages">
-                                {% for message in messages %}
-                                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %} style="color: red;">{{ message }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                        <div class="row justify-content-between text-left">
-                            <div class="form-group col-sm-6 flex-column d-flex">
-                                 <label class="form-control-label px-3">Le nom du produit<span class="text-danger"> *</span></label> 
-                               
-                                 {{form.name}}
+          {% if messages %}
+            <ul class="messages">
+              {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %} style="color: red;">{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
 
-                                 <div class="text-danger">{{form.name.errors}} </div>
-
-                                {% comment %} <input type="text" id="name" name="name" placeholder="Entrez le nom du produit" onblur="validate(1)" required>  {% endcomment %}
-                                 {% if errors.name %}
-                                 <div class="error" style="color: red;">{{ errors.name }}</div>
-                             {% endif %}
-
-                                 </div>
-                            <div class="form-group col-sm-6 flex-column d-flex"> <label class="form-control-label px-3">Selectionné la categorie<span class="text-danger"> *</span></label>
-
-
-                                {{form.category}}
-
-                                 <div class="text-danger">{{form.category.errors}} </div>
-
-                              {% comment %} <select name="category" id="category" required>
-                                    {% for category in category  %}
-                                    
-                                        <option value="{{ category.pk }}">{{ category.name }}</option>
-                                        {% endfor %}
-                                </select>  {% endcomment %}
-
-                                
-                                {% if errors.category %}
-                                <div class="error" style="color: red;">{{ errors.category }}</div>
-                            {% endif %}
-
-                             </div>
-                        </div>
-                        
-
-                        <div class="row justify-content-between text-left">
-                            <div class="form-group col-sm-6 flex-column d-flex"> <label class="form-control-label px-3">Le prix du produit<span class="text-danger"> *</span></label> 
-                                
-                                {{form.price}}
-
-                                 <div class="text-danger">{{form.price.errors}} </div>
-
-                              {% comment %} <input type="text" id="price" name="price" placeholder="Entrez le prix du produit" onblur="validate(3)" required>  {% endcomment %}
-                                {% if errors.price %}
-                                <div class="error" style="color: red;">{{ errors.price }}</div>
-                            {% endif %}
-                            </div>
-                            <div class="form-group col-sm-6 flex-column d-flex"> <label class="form-control-label px-3">La quantité de produit<span class="text-danger"> *</span></label>
-                            
-                                {{form.quantite}}
-
-                                 <div class="text-danger">{{form.quantite.errors}} </div>
-                                {% comment %} <input type="text" id="quantite" name="quantite" placeholder="Entrez la quantité" onblur="validate(4)" required>  {% endcomment %}
-                                {% if errors.quantite %}
-                                <div class="error" style="color: red;">{{ errors.quantite }}</div>
-                            {% endif %}
-                            </div>
-                        </div>
-                        <div class="row justify-content-between text-left">
-                            <div class="form-group col-sm-6 flex-column d-flex"> <label class="form-control-label px-3">Date expiration<span class="text-danger"> *</span></label>
-                               
-                                {{form.date_expiration}}
-
-                                 <div class="text-danger">{{form.date_expiration.errors}} </div>
-
-                                {% comment %} <input type="text" id="date_expiration" name="date_expiration" placeholder="Entrez la date d'expiration" onblur="validate(5)" required> {% endcomment %}
-                                {% if errors.date_expiration %}
-                                <div class="error" style="color: red;">{{ errors.date_expiration }}</div>
-                            {% endif %}
-                            </div>
-                            <div class="form-group col-sm-6 flex-column d-flex"> <label class="form-control-label px-3">Image du produit<span class="text-danger"> *</span></label> 
-                                {% comment %} <input type="file" id="image" name="image" onblur="validate(5)" required>   {% endcomment %}
-                            
-                                {% if errors.image %}
-                                <div class="error" style="color: red;">{{ errors.image }}</div>
-                            {% endif %}
-                            {{form.image}}
-
-                            <div class="text-danger">{{form.image.errors}} </div>
-                            </div>
-                        </div>
-                        <div class="row justify-content-between text-left">
-                            <div class="form-group col-12 flex-column d-flex"> <label class="form-control-label px-3">La description du produit <span class="text-danger"> *</span></label>
-                                {{form.description}}
-
-                                <div class="text-danger">{{form.description.errors}} </div>
-                               
-                                {% comment %} <input type="text" id="description" name="description" placeholder="Entrez une description" onblur="validate(6)" required>  {% endcomment %}
-                                {% if errors.description %}
-                                <div class="error" style="color: red;">{{ errors.description }}</div>
-                            {% endif %}
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row justify-content-end">
-                            <div class="form-group col-sm-6">
-                                <input type="submit" class="btn-block btn-primary" value="Enregistrer">
-                                <!-- <button type="" ></button> </div> -->
-                        </div>
-                    </form>
-
-
-                </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label"><i class="fa fa-capsules"></i> Nom du produit <span class="text-danger">*</span></label>
+              {{ form.name|add_class:"form-control" }}
+              <div class="text-danger">{{ form.name.errors }}</div>
             </div>
-        </div>
+            <div class="col-md-6">
+              <label class="form-label"><i class="fa fa-list-alt"></i> Catégorie <span class="text-danger">*</span></label>
+              {{ form.category|add_class:"form-control" }}
+              <div class="text-danger">{{ form.category.errors }}</div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label"><i class="fa fa-dollar-sign"></i> Prix <span class="text-danger">*</span></label>
+              {{ form.price|add_class:"form-control" }}
+              <div class="text-danger">{{ form.price.errors }}</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label"><i class="fa fa-boxes"></i> Quantité <span class="text-danger">*</span></label>
+              {{ form.quantite|add_class:"form-control" }}
+              <div class="text-danger">{{ form.quantite.errors }}</div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label"><i class="fa fa-calendar-alt"></i> Date d’expiration <span class="text-danger">*</span></label>
+              {{ form.date_expiration|add_class:"form-control" }}
+              <div class="text-danger">{{ form.date_expiration.errors }}</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label"><i class="fa fa-image"></i> Image du produit <span class="text-danger">*</span></label>
+              {{ form.image|add_class:"form-control" }}
+              <div class="text-danger">{{ form.image.errors }}</div>
+              <img id="preview" class="image-preview d-none" src="#" alt="Aperçu">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label"><i class="fa fa-align-left"></i> Description <span class="text-danger">*</span></label>
+            {{ form.description|add_class:"form-control" }}
+            <div class="text-danger">{{ form.description.errors }}</div>
+          </div>
+
+          <div class="text-end">
+            <button type="submit" class="btn btn-primary">
+              <i class="fa fa-save"></i> Enregistrer
+            </button>
+          </div>
+        </form>
+
+      </div>
     </div>
-</body>
-<script src="{% static 'script.js' %}"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+  </div>
+</div>
+
 <script src="{% static 'bootstrap.min.js' %}"></script>
-<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script> -->
+<script>
+  const fileInput = document.querySelector('input[type="file"]');
+  const preview = document.getElementById('preview');
+  if (fileInput && preview) {
+    fileInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.classList.remove('d-none');
+      }
+    });
+  }
+</script>
+</body>
 </html>

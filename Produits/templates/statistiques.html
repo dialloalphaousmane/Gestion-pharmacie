@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block produit %}
+<div class="container mt-4">
+    <h2 class="mb-4">Tableau de bord - Statistiques</h2>
+    
+    <div class="row text-white">
+        <div class="col-md-4 mb-3">
+            <div class="card bg-success p-3">
+                <h4>Nombre total de produits</h4>
+                <h2>{{ total_produits }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card bg-danger p-3">
+                <h4>Produits périmés</h4>
+                <h2>{{ produits_perimes }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card bg-warning p-3">
+                <h4>Stock faible</h4>
+                <h2>{{ stock_faible }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <canvas id="ventesChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="categoriesChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const moisLabels = {{ mois_labels|safe }};
+    const ventesData = {{ ventes_data|safe }};
+    const categoriesLabels = [
+        {% for cat in repartition_categories %}'{{ cat.category__name }}'{% if not forloop.last %}, {% endif %}{% endfor %}
+    ];
+    const categoriesData = [
+        {% for cat in repartition_categories %}{{ cat.nombre }}{% if not forloop.last %}, {% endif %}{% endfor %}
+    ];
+
+    const ctx1 = document.getElementById('ventesChart').getContext('2d');
+    new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: moisLabels,
+            datasets: [{
+                label: 'Ventes mensuelles',
+                data: ventesData,
+                backgroundColor: 'rgba(54, 162, 235, 0.7)'
+            }]
+        }
+    });
+
+    const ctx2 = document.getElementById('categoriesChart').getContext('2d');
+    new Chart(ctx2, {
+        type: 'pie',
+        data: {
+            labels: categoriesLabels,
+            datasets: [{
+                data: categoriesData,
+                backgroundColor: ['#4caf50', '#ff9800', '#2196f3', '#e91e63']
+            }]
+        }
+    });
+</script>
+{% endblock %}

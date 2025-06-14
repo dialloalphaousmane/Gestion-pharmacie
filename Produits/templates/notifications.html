@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block produit %}
+<div class="container mt-5">
+  <div class="text-center mb-4">
+    <h2 class="fw-bold text-primary">🔔 Notifications Produits</h2>
+    <p class="text-muted">Suivez l’état des produits en stock et périmés</p>
+  </div>
+
+  {% if produits_perimes %}
+    <div class="alert alert-danger shadow-sm rounded-3 p-4 mb-4">
+      <h5 class="mb-3"><i class="bi bi-exclamation-octagon-fill"></i> {{ produits_perimes|length }} produit(s) périmé(s) :</h5>
+      <ul class="mb-0">
+        {% for produit in produits_perimes %}
+          <li><strong>{{ produit.name }}</strong> — Expiré le <span class="text-decoration-underline">{{ produit.date_expiration }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  {% if produits_stock_faible %}
+    <div class="alert alert-warning shadow-sm rounded-3 p-4 mb-4">
+      <h5 class="mb-3"><i class="bi bi-exclamation-triangle-fill"></i> {{ produits_stock_faible|length }} produit(s) en stock faible :</h5>
+      <ul class="mb-0">
+        {% for produit in produits_stock_faible %}
+          <li><strong>{{ produit.name }}</strong> — Stock restant : <span class="fw-bold text-danger">{{ produit.quantite }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  {% if not produits_perimes and not produits_stock_faible %}
+    <div class="alert alert-success shadow-sm rounded-3 p-4">
+      <h5><i class="bi bi-check-circle-fill"></i> Aucune alerte pour le moment 🎉</h5>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

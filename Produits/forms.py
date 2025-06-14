@@ -1,121 +1,46 @@
-from django.forms import ModelForm
-from .models import Produits, Vente
-from django import forms 
+from django import forms
+from django.forms import modelformset_factory
+from .models import Produits, Vente, DetailVente
 
 
-class AjoutProduit(ModelForm):
-  
+class AjoutProduit(forms.ModelForm):
     class Meta:
         model = Produits
         fields = [
             'name', 'category', 'price', 'quantite', 'description', 'date_expiration', 'image'
         ]
-
         widgets = {
-            'name': forms.TextInput(
-                attrs = {
-                    'placeholder': 'Entrez le nom du produit',
-                    'class':'form-control'
-                }
-            ),
-
-            'category': forms.Select(
-                attrs={
-                    'class':'form-control'
-                }
-            ),
-
-            'price' : forms.NumberInput(
-                attrs= {
-                    'placeholder': 'Entrez le prix du prodtuit',
-                    'class': 'form-control'
-                }
-            ),
-            
-            'quantite': forms.NumberInput(
-                attrs={
-                    'placeholder': 'Entrez la quantité',
-                    'class': 'form-control'
-                }
-            ),
-            'description': forms.Textarea(
-                attrs={
-                    'placeholder': 'Description',
-                    'class': 'form-control',
-                    'rows': 4
-                }
-            ),
-            'date_expiration': forms.DateInput(
-                attrs={
-                    'placeholder': 'Date d\'expiration',
-                    'class': 'form-control',
-                    'type': 'date'
-                }
-            ),
-            'image': forms.FileInput(
-                attrs={
-                    'class': 'form-control-file'
-                }
-            )
+            'name': forms.TextInput(attrs={'placeholder': 'Nom du produit', 'class':'form-control'}),
+            'category': forms.Select(attrs={'class':'form-control'}),
+            'price': forms.NumberInput(attrs={'placeholder': 'Prix', 'class': 'form-control'}),
+            'quantite': forms.NumberInput(attrs={'placeholder': 'Quantité', 'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'placeholder': 'Description', 'class': 'form-control', 'rows': 4}),
+            'date_expiration': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'image': forms.FileInput(attrs={'class': 'form-control-file'})
         }
 
 
-    def __init__(self, *args, **kwargs):
-        super(AjoutProduit, self).__init__(*args, **kwargs)
-        self.fields['name'].error_messages = {
-            'required': 'Le nom du produit est obligatoire',
-            'invalid': 'Veuillez entrer un nom correct.'
-        }
-        self.fields['category'].error_messages = {
-            'required': 'La catégorie est obligatoire',
-            'invalid': 'Veuillez sélectionner une catégorie valide'
-        }
-        self.fields['price'].error_messages = {
-            'required': 'Le prix du produit est obligatoire',
-            'invalid': 'Veuillez entrer un prix correct.'
-        }
-        self.fields['quantite'].error_messages = {
-            'required': 'La quantité est obligatoire.',
-            'invalid': 'Veuillez entrer une quantité valide.'
-        }
-        self.fields['description'].error_messages = {
-            'required': 'La description est obligatoire.',
-            'invalid': 'Veuillez entrer une description valide.'
-        }
-        self.fields['date_expiration'].error_messages = {
-            'required': "La date d'expiration du produit est obligatoire.",
-            'invalid': 'Veuillez entrer une date d\'expiration valide.'
-        }
-
-    
-# formulaire de vnete
-
-
-class AjoutVente(forms.ModelForm):
-    quantite = forms.IntegerField(
-        help_text='Veuillez entrer la quantité de produit',
-        required=True,
-        error_messages={
-            'required': 'La quantité est obligatoire.',
-            'invalid': 'Veuillez entrer une quantité raisonnable.'
-        }
-    ),
- 
+class AjoutVenteForm(forms.ModelForm):
     customer = forms.CharField(
-        help_text='Veuillez entrer le nom',
+        help_text='Nom du client',
         required=True,
         max_length=100,
-        error_messages={
-            'required': 'Le nom du client est obligatoire.',
-            'invalid': 'Veuillez entrer un nom correct.'
-        }
-    ),
-    class Meta:
-        model = Vente  # Assurez-vous que le nom du modèle est correct ici
-        fields = ['quantite', 'customer']
+        widget=forms.TextInput(attrs={'placeholder': 'Nom du client', 'class': 'form-control'})
+    )
 
-        widgets = {
-            'customer': forms.TextInput(attrs={'placeholder': "Nom du client", "class": 'form-control'}),
-            'quantite': forms.TextInput(attrs={'placeholder': "La quantité", "class": 'form-control'}),
-        }
-        
+    class Meta:
+        model = Vente
+        fields = ['customer']
+
+
+# FormSet pour vendre plusieurs produits en même temps
+DetailVenteFormSet = modelformset_factory(
+    DetailVente,
+    fields=('produit', 'quantite', 'prix_unitaire'),
+    extra=3,
+    widgets={
+        'produit': forms.Select(attrs={'class': 'form-control'}),
+        'quantite': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
+        'prix_unitaire': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+    }
+)

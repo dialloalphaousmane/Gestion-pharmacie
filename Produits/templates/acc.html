@@ -1,13 +1,133 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block title %}
- Page Acceuil
+    Tableau de bord | Gestion Pharmacie
 {% endblock title %}
 
-
 {% block produit %}
-<img src="{% static 'je doit mettre une photo de la pharmacie' %}" alt="">
-photo de la pharmacie pour l'acceuil .jpeg
+<style>
+    .card-premium {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .card-premium:hover {
+        transform: translateY(-5px);
+    }
+
+    .icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .bg-gradient-success {
+        background: linear-gradient(to right, #00b894, #55efc4);
+        color: white;
+    }
+
+    .bg-gradient-danger {
+        background: linear-gradient(to right, #d63031, #ff7675);
+        color: white;
+    }
+
+    .bg-gradient-warning {
+        background: linear-gradient(to right, #e17055, #fdcb6e);
+        color: white;
+    }
+
+    .dashboard-btn {
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 15px;
+        border-radius: 30px;
+    }
+</style>
+
+<div class="container my-5">
+    <h1 class="text-center mb-5 text-success fw-bold">
+        💊 Tableau de bord - Gestion de la pharmacie
+    </h1>
+
+    <!-- Cartes statistiques -->
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card card-premium bg-gradient-success text-center">
+                <div class="card-body">
+                    <div class="icon">🧴</div>
+                    <h5 class="fw-light">Produits disponibles</h5>
+                    <p class="display-6 fw-bold">{{ total_produits }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-premium bg-gradient-danger text-center">
+                <div class="card-body">
+                    <div class="icon">⛔</div>
+                    <h5 class="fw-light">Produits périmés</h5>
+                    <p class="display-6 fw-bold">{{ produits_perimes }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-premium bg-gradient-warning text-center">
+                <div class="card-body">
+                    <div class="icon">📉</div>
+                    <h5 class="fw-light">Stock faible</h5>
+                    <p class="display-6 fw-bold">{{ stock_faible }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions principales -->
+    <div class="row mt-5 text-center">
+        <div class="col-md-3 mb-3">
+            <a href="{% url 'ajout' %}" class="btn btn-outline-success w-100 dashboard-btn shadow-sm">
+                ➕ Nouveau Médicament
+            </a>
+
+        </div>
+        <div class="col-md-3 mb-3">
+            <a href="{% url 'home' %}" class="btn btn-outline-primary w-100 dashboard-btn shadow-sm">
+                📦 Voir Produits
+            </a>
+
+        </div>
+        <div class="col-md-3 mb-3">
+            <a href="{% url 'historique_ventes' %}" class="btn btn-outline-info w-100 dashboard-btn shadow-sm">
+                💰 Historique Ventes
+            </a>
+
+        </div>
+        <div class="col-md-3 mb-3">
+           <a href="{% url 'statistiques' %}" class="btn btn-outline-dark w-100 dashboard-btn shadow-sm">
+                📊 Statistiques
+            </a>
+
+        </div>
+    </div>
+
+    <!-- Alertes section -->
+ <div class="mt-5">
+    <h4 class="text-danger fw-bold">🚨 Alertes Médicaments</h4>
+    {% if alertes %}
+        <ul class="list-group mt-3">
+            {% for alerte in alertes %}
+                <li class="list-group-item list-group-item-warning fw-semibold">
+                    {{ alerte }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-success mt-3">
+            ✅ Aucun produit en alerte pour le moment.
+        </div>
+    {% endif %}
+</div>
 
 {% endblock produit %}
-

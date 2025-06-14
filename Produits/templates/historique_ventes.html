@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Historique des ventes{% endblock %}
+
+{% block produit %}
+<div class="container my-5">
+    <h2 class="mb-4 text-primary fw-bold border-bottom pb-3">
+        <i class="fa fa-history me-2"></i>Historique des ventes
+    </h2>
+
+    {% if ventes %}
+    <div class="table-responsive shadow rounded border border-1">
+        <table class="table table-hover table-bordered align-middle mb-0">
+            <thead class="table-primary text-center text-dark fw-bold">
+                <tr>
+                    <th class="py-3 px-3"># ID</th>
+                    <th class="py-3 px-3">🧪 Produit</th>
+                    <th class="py-3 px-3">📦 Quantité</th>
+                    <th class="py-3 px-3">📅 Date</th>
+                    <th class="py-3 px-3">💰 Montant</th>
+                </tr>
+            </thead>
+            <tbody class="text-center text-dark bg-white">
+                {% for vente in ventes %}
+                <tr>
+                    <td class="fw-semibold">{{ vente.id }}</td>
+                    <td class="text-truncate" style="max-width:180px;">{{ vente.produit.name }}</td>
+                    <td>{{ vente.quantite }}</td>
+                    <td>{{ vente.sale_date|date:"d/m/Y H:i" }}</td>
+                    <td class="fw-bold text-success">{{ vente.total_amount|floatformat:0 }} GNF</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center shadow-sm py-4 d-flex flex-column align-items-center justify-content-center" role="alert" style="min-height: 150px;">
+        <i class="fa fa-info-circle mb-3" style="font-size: 2rem; color: #0dcaf0;"></i>
+        <strong class="fs-5">Aucune vente enregistrée pour le moment.</strong>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

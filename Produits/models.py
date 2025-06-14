@@ -81,7 +81,25 @@ class Facture_Client(models.Model):
         return f"Le reçu de {self.customer.customer}"
     
     
-    
+ # models.py
+from django.db import models
+from django.utils import timezone
+
+class Ventes(models.Model):
+    date = models.DateTimeField(default=timezone.now)
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"Vente #{self.id} - {self.date.strftime('%d/%m/%Y %H:%M')}"
+   
+class DetailVente(models.Model):
+    vente = models.ForeignKey(Vente, on_delete=models.CASCADE, related_name='details')
+    produit = models.ForeignKey('Produits', on_delete=models.CASCADE)
+    quantite = models.PositiveIntegerField()
+    prix_unitaire = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def montant_total(self):
+        return self.quantite * self.prix_unitaire
 
 
 
