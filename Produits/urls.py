@@ -2,6 +2,7 @@ from django.urls import path
 from .views import * 
 from django.conf import settings
 from django.conf.urls.static import static
+from . import views  # ✅ ceci est indispensable
 
 urlpatterns = [
     path('',Acc,name='acc'),
@@ -9,6 +10,8 @@ urlpatterns = [
     path('produit/', Affichage.as_view(), name='home'),
     path('ajout/', AjoutProduits.as_view(), name='ajout'),
     # path('modification/<int:id>/', modifier,name='modifier'),
+    # pour url de IA
+    path('ia/', views.ia_assistant, name='ia_assistant'), 
 
     path('modication/<int:pk>/', update_donnees.as_view(), name='modifier'),
     # path('supprimer/<int:id>/', supprimer, name="supprimer"),
@@ -26,6 +29,11 @@ urlpatterns = [
 
 
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+
+
+
 
 
 

@@ -15,6 +15,7 @@ from .models import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
+
 # Create your views here.
 
 # def home(request):
@@ -440,4 +441,16 @@ def Creation_Compte(request):
         return redirect('login')
 
     return render(request, 'creation.html')
+
+    #pour la route de iA
+    from django.shortcuts import render
+
+def ia_assistant(request):
+    return render(request, 'ia.html')  # et non 'produits/ia.html'
+
+
+ # Crée un fichier ia.html dans templates/produits/
+ 
+ 
+
 

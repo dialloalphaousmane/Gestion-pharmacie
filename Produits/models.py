@@ -1,4 +1,6 @@
 from django.db import models
+#Alertes pour les produits périmés
+from datetime import date
 
 
 
@@ -20,8 +22,17 @@ class Produits(models.Model):
     date_expiration= models.DateField()
     image=models.ImageField(null=True,blank=True)
     
+    #alerte pour le produit perime
+    def est_perime(self):
+            return self.date_expiration < date.today()
+    #si le stocker es faible
+    def stock_faible(self):
+        return self.quantite <= 10
+    
     class Meta:
         ordering =['-date_ajout']
+        
+    
 
     
     def statut_quantite(self):
@@ -69,3 +80,8 @@ class Facture_Client(models.Model):
     def __str__(self) :
         return f"Le reçu de {self.customer.customer}"
     
+    
+    
+
+
+
