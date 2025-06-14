@@ -11,7 +11,7 @@ urlpatterns = [
     path('ajout/', AjoutProduits.as_view(), name='ajout'),
     # path('modification/<int:id>/', modifier,name='modifier'),
     # pour url de IA
-    path('ia/', views.ia_assistant, name='ia_assistant'), 
+    path('ia/', views.ia_assistant, name='ia_assistant'),
 
     path('modication/<int:pk>/', update_donnees.as_view(), name='modifier'),
     # path('supprimer/<int:id>/', supprimer, name="supprimer"),
